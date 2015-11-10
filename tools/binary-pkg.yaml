@@ -1,0 +1,13 @@
+hashstack:
+  parameters:
+    pyver: '3.4'
+  packages:
+    launcher:
+    python:
+      use_host: false
+    pip:
+    yaml:
+
+python-pip:
+  ipython:
+  pyyaml:

@@ -1,0 +1,14 @@
+extends:
+- file: centos.yaml
+
+parameters:
+  pyver: '3.4'
+
+packages:
+  launcher:
+
+  gettext:
+  git:
+
+  python:
+  yaml:

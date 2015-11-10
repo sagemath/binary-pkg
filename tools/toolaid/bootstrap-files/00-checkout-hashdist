@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+if [ ! -f ./00-checkout-hashdist ]; then
+    echo "Must be run from within the bootstrap-files directory"
+    exit 1
+fi
+
+set -e
+
+echo "Getting hashdist from github"
+
+if [ ! -d hashdist ]; then
+    git clone https://github.com/hashdist/hashdist.git
+else
+    (cd hashdist && git pull)
+fi
+
+
+echo "Getting hashstack from github"
+
+if [ ! -d hashstack ]; then
+    git clone https://github.com/hashdist/hashstack.git
+else
+    (cd hashstack && git pull)
+fi
+
+
+cp hashconf/default-darwin.yaml hashstack/
+cp hashconf/default-linux.yaml hashstack/
+

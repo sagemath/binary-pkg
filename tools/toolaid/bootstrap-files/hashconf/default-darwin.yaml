@@ -1,0 +1,14 @@
+extends:
+- file: darwin.yaml
+
+parameters:
+  pyver: '3.4'
+
+packages:
+  launcher:
+
+  gettext:
+  git:
+
+  python:
+  yaml:

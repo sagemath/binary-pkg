@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -e
+
+# This is the root dir
+DIR="$(git rev-parse --show-toplevel)"
+if [ -d "$DIR/.git" ] ; then
+    echo "Root directory = $DIR"
+else
+    echo "Wrong directory? ($DIR)"
+    exit 1
+fi
+export LOCAL="$DIR/tools/bootstrap"
+
+cd $DIR
+
+for step in "$DIR"/tools/toolaid/bootstrap-files/* ; do
+    cd "$DIR"/tools/toolaid/bootstrap-files
+    if [ -z "${step##*\~}" ]; then
+	continue   # skip trailing tilde
+    fi
+    if [ -d $step ]; then
+	continue   # skip directories
+    fi
+    $step
+    if [ $? -ne 0 ]; then
+	echo "Failed to run $step"
+	exit 1
+    fi
+done
+
