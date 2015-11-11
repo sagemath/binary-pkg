@@ -1,1 +1,6 @@
 *~
+.#*
+__pycache__
+/source/
+/tmp/
+/staging/

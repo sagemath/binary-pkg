@@ -1,0 +1,34 @@
+name: SageMath
+
+repository: https://github.com/sagemath/sage.git
+branch: develop
+
+build: |
+    export SAGE_FAT_BINARY=yes
+    export SAGE_PARALLEL_SPKG_BUILD=yes
+    export SAGE_ATLAS_ARCH=Corei2,SSE3,SSE2,SSE1
+    export SAGE_ATLAS_LIB=/home/vbraun/Sage/ATLAS
+    export MAKE='make -j{ncpu}'
+    make
+    git gc --aggressive --prune=now
+
+version: |
+    source src/bin/sage-version.sh && echo $SAGE_VERSION
+
+package:
+  - name: Full binary tarball
+    command: |
+        tar cjf sage-{version}-{osname}-{arch}.tar.bz2 {path}
+    files:
+      - include: '**/*'
+      - exclude: upstream/**/*
+    
+  - name: Runtime binaries only
+    command: |
+        tar cjf sage-runtime-{version}-{osname}-{arch}.tar.bz2 {path}
+    files:
+      - include: '**/*'
+      - exclude: build/**/*
+      - exclude: src/**/*
+      - exclude: .git/**/*
+    strip: True
