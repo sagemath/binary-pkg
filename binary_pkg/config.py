@@ -32,6 +32,7 @@ class PackageConfiguration(object):
         self._config = config
         self._data = data
         self._files = None
+        self._rewrite_path_filter = None
 
     @property
     def name(self):
@@ -66,7 +67,8 @@ class PackageConfiguration(object):
         if self._files is not None:
             return self._files
         ff = FileFilter(self._config.source_path)
-        for selector in self._data['files']:
+        selectors = self._data.get('files', [])
+        for selector in selectors:
             if list(selector.keys()) == ['include']:
                 ff.include(selector['include'])
             elif list(selector.keys()) == ['exclude']:
@@ -75,7 +77,22 @@ class PackageConfiguration(object):
                 raise ConfigurationError('file selector must be include xor exclude')
         self._files = ff.sorted()
         return self._files
-    
+
+    @property
+    def rewrite_path_filter(self):
+        if self._rewrite_path_filter is not None:
+            return self._rewrite_path_filter
+        ff = FileFilter(self._config.source_path)
+        selectors = self._data.get('files', []) + self._data.get('rewrite_path', [])
+        for selector in selectors:
+            if list(selector.keys()) == ['include']:
+                ff.include(selector['include'])
+            elif list(selector.keys()) == ['exclude']:
+                ff.exclude(selector['exclude'])
+            else:
+                raise ConfigurationError('file selector must be include xor exclude')
+        self._rewrite_path_filter = ff
+        return self._rewrite_path_filter
 
 class Configuration(object):
 

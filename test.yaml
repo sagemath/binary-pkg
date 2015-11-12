@@ -17,3 +17,5 @@ package:
         tar cjf {dist}/test-{version}-{osname}-{arch}.tar.bz2 {path}
     files:
       - include: '**'
+    rewrite_path:
+      - exclude: '**/*.a'

@@ -28,6 +28,9 @@ package:
       - exclude: src/build/lib.*/**
       - exclude: src/build/temp.*/**
       - exclude: logs/**
+    rewrite_path:
+      - exclude: '**/*dvi'
+      - exclude: 'local/lib/*.a'
     
   - name: Runtime binaries only
     dist: |
@@ -42,4 +45,7 @@ package:
       - exclude: src/**
       - exclude: local/lib/**.a
       - exclude: .git/**
+    rewrite_path:
+      - exclude: '**/*.dvi'
+      - exclude: 'local/lib/*.a'
     strip: True

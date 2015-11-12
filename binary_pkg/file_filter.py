@@ -24,18 +24,25 @@ class FileFilter(object):
     def __repr__(self):
         return '\n'.join(self._files)
 
+    def match(self, relative_path):
+        assert not os.path.isabs(relative_path)
+        for filter_type, matcher in reversed(self._filters):
+            match = matcher(relative_path)
+            if filter_type == INCLUDE and match:
+                return True
+            elif filter_type == EXCLUDE and match:
+                return False
+        return None
+    
     def __iter__(self):
         start = len(self._path)
         for path, dirs, files in os.walk(self._path):
             for filename in [''] + files:
                 fqn = os.path.join(path, filename)
                 relative = fqn[start+1:]
-                for filter_type, match in reversed(self._filters):
-                    if filter_type == INCLUDE and match(relative):
-                        yield fqn
-                        break
-                    elif filter_type == EXCLUDE and match(relative):
-                        break
+                matches = self.match(relative)
+                if matches == True:
+                    yield fqn
 
     def sorted(self):
         return sorted(self)

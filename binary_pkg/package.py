@@ -197,12 +197,15 @@ class Packager(object):
                 log.debug('Directory {0}'.format(relative))
                 mkdir_p(os.path.dirname(dst))
             elif os.path.isfile(src):
-                log.debug('Copying {0}'.format(relative))
                 f = InstallFile(src, dst)
                 f.copy()
-                patch = f.find_patch(marker)
-                if patch:
-                    self._patch[relative] = patch
+                if self.package_config.rewrite_path_filter.match(relative) == True:
+                    log.debug('Copying {0}, checking path'.format(relative))
+                    patch = f.find_patch(marker)
+                    if patch:
+                        self._patch[relative] = patch
+                else:
+                    log.debug('Copying {0}, ignoring path'.format(relative))
             else:
                 assert False, 'special file'
         self.print_patch_summary()

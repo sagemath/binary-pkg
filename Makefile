@@ -4,7 +4,7 @@ export TOOL:=$(REPO_ROOT)/tools/binary-pkg/activate
 
 bootstrap:
 	./tools/toolaid/bootstrap
-	./tools/toolaid/bin/toolaid --build tools/binary-pkg.yaml
+	./tools/bootstrap/bin/python3 ./tools/toolaid/bin/toolaid --build tools/binary-pkg.yaml
 
 
 
