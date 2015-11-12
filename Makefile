@@ -16,6 +16,8 @@ checkout-%: %.yaml
 build-%: %.yaml
 	$(TOOL) python -m binary_pkg.cmdline --config $^ --build
 
+package-%: %.yaml
+	$(TOOL) python -m binary_pkg.cmdline --config $^ --package
 
 shell:
 	$(TOOL) ipython
@@ -25,6 +27,12 @@ test:
 
 info:
 	$(TOOL) python -m binary_pkg.os_information
+	$(TOOL) python -m binary_pkg.cmdline --config sage.yaml --info
 
 clean:
 	rm -rf source build tmp
+
+distclean: clean
+	rm -rf tools/bootstrap tools/binary-pkg
+	rm -rf tools/toolaid/bootstrap-files/hashdist
+	rm -rf tools/toolaid/bootstrap-files/hashstack

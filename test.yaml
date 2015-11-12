@@ -1,0 +1,19 @@
+name: PackagingTest
+
+repository: https://github.com/octol/minimal-gtest-autotools
+branch: master
+
+build: |
+    autoreconf -vfi
+    ./configure
+    make
+
+version: |
+    echo 1.0
+
+package:
+  - name: Full binary tarball
+    command: |
+        tar cjf test-{version}-{osname}-{arch}.tar.bz2 {path}
+    files:
+      - include: '**'

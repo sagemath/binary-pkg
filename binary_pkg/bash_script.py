@@ -22,5 +22,4 @@ class BashScript(object):
         
     def output(self, cwd=None):
         stdout = subprocess.check_output(['bash', self._filename], cwd=cwd)
-        print(stdout)
-        return stdout.strip()
+        return stdout.strip().decode('utf-8')

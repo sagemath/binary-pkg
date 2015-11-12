@@ -2,10 +2,14 @@
 import sys
 import os
 import argparse
+
 import logging
+logging.basicConfig()
+log = logging.getLogger()
 
 from binary_pkg.config import Configuration
 from binary_pkg.git_interface import git_clone
+from binary_pkg.package import Packager
 
 
 description = """
@@ -30,6 +34,8 @@ def make_parser():
                         help='Build')  
     parser.add_argument('--package', default=False, action='store_true',
                         help='Package')  
+    parser.add_argument('--info', default=False, action='store_true',
+                        help='Show information')  
     return parser
 
 
@@ -41,10 +47,14 @@ def launch():
         level = getattr(logging, args.log)
         log.setLevel(level=level)
     config = Configuration(args.config)
+    if args.info:
+        print(config)
     if args.checkout:
         git_clone(config)
     if args.build:
         config.build_script.run(cwd=config.source_path)
+    if args.package:
+        Packager(config, config.package[0]).copy().strip().save_install_script()
 
         
 if __name__ == '__main__':

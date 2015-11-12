@@ -11,3 +11,6 @@ hashstack:
 python-pip:
   ipython:
   pyyaml:
+  glob2:
+  jinja2:
+
