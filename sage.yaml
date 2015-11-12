@@ -22,15 +22,16 @@ package:
     files:
       - include: '**'
       - exclude: '**.pyc'
-      - exclude: '**.dvi'       # pascal strings?
       - exclude: upstream/**
       - exclude: src/doc/output/doctrees/**   # weird string terminators
       - exclude: src/build/lib.*/**
       - exclude: src/build/temp.*/**
       - exclude: logs/**
+      - exclude: config.log
     rewrite_path:
-      - exclude: '**/*dvi'
+      - exclude: '**/*dvi'          # pascal strings?
       - exclude: 'local/lib/*.a'
+      - exclude: local/lib/ecl-*/help.doc
     
   - name: Runtime binaries only
     dist: |
@@ -38,9 +39,9 @@ package:
     files:
       - include: '**'
       - exclude: '**.pyc'
-      - exclude: '**.dvi'       # dvi does not use null-terminated strings
       - exclude: upstream/**
       - exclude: logs/**
+      - exclude: config.log
       - exclude: build/**
       - exclude: src/**
       - exclude: local/lib/**.a
@@ -48,4 +49,5 @@ package:
     rewrite_path:
       - exclude: '**/*.dvi'
       - exclude: 'local/lib/*.a'
+      - exclude: local/lib/ecl-*/help.doc
     strip: True

@@ -1,5 +1,6 @@
 
 import os
+import stat
 import shutil
 import re
 import string
@@ -63,9 +64,14 @@ class InstallFile(object):
         if self._has_zero is None:
             self._has_zero = b'\0' in self.content()
         return self._has_zero
+
+    def _make_user_rw(self, filename):
+        st = os.stat(filename)
+        os.chmod(filename, st.st_mode | stat.S_IREAD | stat.S_IWRITE )
     
     def copy(self):
         shutil.copy2(self._src, self._dst)
+        self._make_user_rw(self._dst)
 
     def content(self):
         if self._content is None:
@@ -182,6 +188,7 @@ class Packager(object):
 
     def copy(self):
         shutil.rmtree(self.root, ignore_errors=True)
+        mkdir_p(self.root)
         marker = self.source.encode('utf-8')
         for src in self.package_config.files():
             assert src.startswith(self.source)
@@ -195,7 +202,7 @@ class Packager(object):
                 os.symlink(linkto, dst)
             elif os.path.isdir(src):
                 log.debug('Directory {0}'.format(relative))
-                mkdir_p(os.path.dirname(dst))
+                mkdir_p(dst)
             elif os.path.isfile(src):
                 f = InstallFile(src, dst)
                 f.copy()

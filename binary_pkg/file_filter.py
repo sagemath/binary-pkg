@@ -37,7 +37,7 @@ class FileFilter(object):
     def __iter__(self):
         start = len(self._path)
         for path, dirs, files in os.walk(self._path):
-            for filename in [''] + files:
+            for filename in dirs + files:
                 fqn = os.path.join(path, filename)
                 relative = fqn[start+1:]
                 matches = self.match(relative)
