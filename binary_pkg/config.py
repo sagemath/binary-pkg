@@ -12,6 +12,16 @@ from binary_pkg.os_information import osname, arch
 from binary_pkg.file_filter import FileFilter
 
 
+def filename_escape(name):
+    def escape(ch):
+        if ch in string.ascii_letters + string.digits:
+            return ch
+        else:
+            return '_'
+    return ''.join(map(escape, name))
+
+
+
 class ConfigurationError(Exception):
     pass
 
@@ -29,28 +39,28 @@ class PackageConfiguration(object):
         
     @property
     def staging_path(self):
-        def escape(ch):
-            if ch in string.ascii_letters + string.digits:
-                return ch
-            else:
-                return '_'
-        name = ''.join(map(escape, self.name))
+        name = filename_escape(self.name)
         path = os.path.join(self._config.root_path, 'staging', name)
         mkdir_p(path)
         return path
 
+    @property
+    def root_path(self):
+        return os.path.join(self.staging_path, filename_escape(self._config.name))
+    
     def _expand_package_script(self, template):
         return template.format(
             version=self._config.version,
             osname=osname(),
             arch=arch(),
-            path=self.staging_path,
+            path=filename_escape(self._config.name),
+            dist=self._config.dist_path,
         )
             
     @property
-    def package_script(self):
+    def dist_script(self):
         script = self._expand_package_script(self._data['command'])
-        return BashScript(script, self._config.tmp_path)
+        return BashScript(script, self._config.tmp_path, cwd=self.staging_path)
     
     def files(self):
         if self._files is not None:
@@ -79,14 +89,20 @@ class Configuration(object):
         return os.path.dirname(os.path.abspath(self._filename))
 
     @property
+    def dist_path(self):
+        path = os.path.join(self.root_path, 'dist')
+        mkdir_p(path)
+        return path
+
+    @property
     def source_path(self):
-        path = make_path(self.root_path, 'source', self.name)
+        path = make_path(self.root_path, 'source', filename_escape(self.name))
         mkdir_p(path)
         return path
     
     @property
     def tmp_path(self):
-        path = os.path.join(self.root_path, 'tmp', self.name)
+        path = os.path.join(self.root_path, 'tmp', filename_escape(self.name))
         mkdir_p(path)
         return path
 
@@ -110,7 +126,7 @@ class Configuration(object):
     @property
     def build_script(self):
         script = self._expand_build_script(self._data['build'])
-        return BashScript(script, self.tmp_path)
+        return BashScript(script, self.tmp_path, cwd=self.source_path)
 
     @property
     def package(self):
@@ -118,7 +134,7 @@ class Configuration(object):
 
     @property
     def version(self):
-        return BashScript(self._data['version'], self.tmp_path).output(cwd=self.source_path)
+        return BashScript(self._data['version'], self.tmp_path, cwd=self.source_path).output()
 
     def __repr__(self):
         result = textwrap.dedent("""

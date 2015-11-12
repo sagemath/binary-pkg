@@ -17,8 +17,8 @@ version: |
 
 package:
   - name: Full binary tarball
-    command: |
-        tar cjf sage-{version}-{osname}-{arch}.tar.bz2 {path}
+    dist: |
+        tar cjf {dist}/sage-{version}-{osname}-{arch}.tar.bz2 {path}
     files:
       - include: '**'
       - exclude: '**.pyc'
@@ -30,8 +30,8 @@ package:
       - exclude: logs/**
     
   - name: Runtime binaries only
-    command: |
-        tar cjf sage-runtime-{version}-{osname}-{arch}.tar.bz2 {path}
+    dist: |
+        tar cjf {dist}/sage-runtime-{version}-{osname}-{arch}.tar.bz2 {path}
     files:
       - include: '**'
       - exclude: '**.pyc'

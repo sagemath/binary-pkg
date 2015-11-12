@@ -169,6 +169,10 @@ class Packager(object):
         return self._package_config.staging_path
 
     @property
+    def root(self):
+        return self._package_config.root_path
+
+    @property
     def config(self):
         return self._config
     
@@ -177,7 +181,7 @@ class Packager(object):
         return self._package_config
 
     def copy(self):
-        shutil.rmtree(os.path.join(self.staging, self.config.name), ignore_errors=True)
+        shutil.rmtree(self.root, ignore_errors=True)
         marker = self.source.encode('utf-8')
         for src in self.package_config.files():
             assert src.startswith(self.source)

@@ -7,7 +7,8 @@ import subprocess
 
 class BashScript(object):
 
-    def __init__(self, source_code, tmp_path):
+    def __init__(self, source_code, tmp_path, cwd=None):
+        self._cwd = cwd
         fd, self._filename = tempfile.mkstemp(dir=tmp_path, suffix='.sh')
         os.close(fd)
         self._source_code = source_code
@@ -17,9 +18,9 @@ class BashScript(object):
     def __repr__(self):
         return self._source_code
             
-    def run(self, cwd=None):
-        subprocess.check_call(['bash', self._filename], cwd=cwd)
+    def run(self):
+        subprocess.check_call(['bash', self._filename], cwd=self._cwd)
         
-    def output(self, cwd=None):
-        stdout = subprocess.check_output(['bash', self._filename], cwd=cwd)
+    def output(self):
+        stdout = subprocess.check_output(['bash', self._filename], cwd=self._cwd)
         return stdout.strip().decode('utf-8')

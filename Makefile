@@ -16,8 +16,19 @@ checkout-%: %.yaml
 build-%: %.yaml
 	$(TOOL) python -m binary_pkg.cmdline --config $^ --build
 
+stage-%: %.yaml
+	$(TOOL) python -m binary_pkg.cmdline --config $^ --stage
+
+dist-%: %.yaml
+	$(TOOL) python -m binary_pkg.cmdline --config $^ --dist
+
+
 package-%: %.yaml
-	$(TOOL) python -m binary_pkg.cmdline --config $^ --package
+	$(MAKE) checkout-$*
+	$(MAKE) build-$*
+	$(MAKE) stage-$*
+	$(MAKE) dist-$*
+
 
 shell:
 	$(TOOL) ipython
@@ -30,7 +41,7 @@ info:
 	$(TOOL) python -m binary_pkg.cmdline --config sage.yaml --info
 
 clean:
-	rm -rf source build tmp
+	rm -rf source build tmp dist
 
 distclean: clean
 	rm -rf tools/bootstrap tools/binary-pkg

@@ -14,6 +14,6 @@ version: |
 package:
   - name: Full binary tarball
     command: |
-        tar cjf test-{version}-{osname}-{arch}.tar.bz2 {path}
+        tar cjf {dist}/test-{version}-{osname}-{arch}.tar.bz2 {path}
     files:
       - include: '**'
