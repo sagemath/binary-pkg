@@ -49,7 +49,7 @@ class PackageConfiguration(object):
     def root_path(self):
         return os.path.join(self.staging_path, filename_escape(self._config.name))
     
-    def _expand_package_script(self, template):
+    def _expand_dist_script(self, template):
         return template.format(
             version=self._config.version,
             osname=osname(),
@@ -60,7 +60,7 @@ class PackageConfiguration(object):
             
     @property
     def dist_script(self):
-        script = self._expand_package_script(self._data['command'])
+        script = self._expand_dist_script(self._data['dist'])
         return BashScript(script, self._config.tmp_path, cwd=self.staging_path)
     
     def files(self):
@@ -167,11 +167,11 @@ class Configuration(object):
         for i, pkg in enumerate(self.package):
             result += textwrap.dedent("""
             Package #{i}: {pkg.name}
-            {package_script}
+            {dist_script}
             """).format(
                 pkg=pkg,
                 i=i, 
-                package_script=textwrap.indent(str(pkg.package_script), ' '*4)
+                dist_script=textwrap.indent(str(pkg.dist_script), ' '*4)
             )
             for f in pkg.files():
                 result += f + '\n'

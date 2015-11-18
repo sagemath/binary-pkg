@@ -6,8 +6,6 @@ branch: develop
 build: |
     export SAGE_FAT_BINARY=yes
     export SAGE_PARALLEL_SPKG_BUILD=yes
-    export SAGE_ATLAS_ARCH=Corei2,SSE3,SSE2,SSE1
-    export SAGE_ATLAS_LIB=/home/vbraun/Sage/ATLAS
     export MAKE='make -j{ncpu}'
     make
     git gc --aggressive --prune=now
@@ -22,6 +20,7 @@ package:
     files:
       - include: '**'
       - exclude: '**.pyc'
+      - exclude: '**.pyo'
       - exclude: upstream/**
       - exclude: src/doc/output/doctrees/**   # weird string terminators
       - exclude: src/build/lib.*/**

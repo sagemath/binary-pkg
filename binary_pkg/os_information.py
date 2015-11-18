@@ -7,9 +7,9 @@ def osname():
     distname, version, extra = platform.linux_distribution()
     if distname:
         return '{0}_{1}'.format(distname, version)
-    osx, version, extra = platform.mac_ver()
-    if osx:
-        return '{0}_{1}'.format(osx, version)
+    osx_version, empty, arch = platform.mac_ver()
+    if osx_version:
+        return 'OSX_{0}'.format(osx_version)
     raise RuntimeError('unknown distribution / os')
         
 

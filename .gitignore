@@ -1,5 +1,7 @@
 *~
 .#*
+*.pyo
+*.pyc
 __pycache__
 /source/
 /tmp/
