@@ -1,7 +1,10 @@
 name: SageMath
 
-repository: https://github.com/sagemath/sage.git
-branch: develop
+# repository: https://github.com/sagemath/sage.git
+# branch: develop
+
+repository: http://trac.sagemath.org/sage.git
+branch: u/vbraun/sage_binary_installer
 
 build: |
     export SAGE_FAT_BINARY=yes
