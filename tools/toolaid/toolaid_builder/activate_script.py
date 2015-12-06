@@ -22,7 +22,7 @@ if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
 fi
 
 if [ $# -ge 1 ] ; then
-   $@
+   "$@"
 fi
 """
 
