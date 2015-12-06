@@ -16,7 +16,7 @@ have to do is run
 
     make package-sage
 
-This creates a tarball with an added ``install.py`` file that patches
+This creates a tarball with an added ``relocate-once.py`` file that patches
 any hard-coded paths.
 
 

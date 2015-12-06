@@ -229,8 +229,11 @@ class Packager(object):
         log.critical('todo: strip')
         return self
 
-    def install_script(self):
-        template = jinja2_env.get_template('install.py')
+    def relocate_script(self):
+        """
+        Return the relocate script as string
+        """
+        template = jinja2_env.get_template('relocate-once.py')
         return template.render(
             patches=self._patch,
             SearchReplacePatch=SearchReplacePatch,
@@ -239,9 +242,12 @@ class Packager(object):
             isinstance=isinstance,
         )
         
-    def save_install_script(self):
-        install_py = os.path.join(self.staging, self.config.name, 'install.py')
-        with open(install_py, 'wb') as f:
-            f.write(self.install_script().encode('utf-8'))
-        os.chmod(install_py, 0o755)
+    def save_relocate_script(self):
+        """
+        Save the relocate script in the correct location
+        """
+        relocate_py = os.path.join(self.staging, self.config.name, 'relocate-once.py')
+        with open(relocate_py, 'wb') as f:
+            f.write(self.relocate_script().encode('utf-8'))
+        os.chmod(relocate_py, 0o755)
         

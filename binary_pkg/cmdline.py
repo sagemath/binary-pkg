@@ -56,7 +56,7 @@ def launch():
     if args.build:
         config.build_script.run()
     if args.stage:
-        Packager(config, config.package[0]).copy().strip().save_install_script()
+        Packager(config, config.package[0]).copy().strip().save_relocate_script()
     if args.dist:
         config.package[0].dist_script.run()
 

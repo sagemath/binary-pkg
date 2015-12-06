@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+"""
+Rewrite Paths
+
+This script can be used exactly once to move the directory to a
+different location.
+"""
 
 import os
 
