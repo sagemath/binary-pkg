@@ -2,7 +2,7 @@ export REPO_ROOT:=$(shell git rev-parse --show-toplevel)
 export TOOL:=$(REPO_ROOT)/tools/binary-pkg/activate
 
 
-bootstrap:
+$(TOOL):
 	./tools/toolaid/bootstrap
 	./tools/bootstrap/bin/python3 ./tools/toolaid/bin/toolaid --build tools/binary-pkg.yaml
 
@@ -10,17 +10,17 @@ bootstrap:
 
 .PHONY: bootstrap shell test clean info
 
-checkout-%: %.yaml
-	$(TOOL) python -m binary_pkg.cmdline --config $^ --checkout
+checkout-%: %.yaml $(TOOL)
+	$(TOOL) python -m binary_pkg.cmdline --config $< --checkout
 
-build-%: %.yaml
-	$(TOOL) python -m binary_pkg.cmdline --config $^ --build
+build-%: %.yaml $(TOOL)
+	$(TOOL) python -m binary_pkg.cmdline --config $< --build
 
-stage-%: %.yaml
-	$(TOOL) python -m binary_pkg.cmdline --config $^ --stage
+stage-%: %.yaml $(TOOL)
+	$(TOOL) python -m binary_pkg.cmdline --config $< --stage
 
-dist-%: %.yaml
-	$(TOOL) python -m binary_pkg.cmdline --config $^ --dist
+dist-%: %.yaml $(TOOL)
+	$(TOOL) python -m binary_pkg.cmdline --config $< --dist
 
 
 package-%: %.yaml
@@ -30,13 +30,13 @@ package-%: %.yaml
 	$(MAKE) dist-$*
 
 
-shell:
+shell: $(TOOL)
 	$(TOOL) ipython
 
-test:
+test: $(TOOL)
 	$(TOOL) python -m unittest discover
 
-info:
+info: $(TOOL)
 	$(TOOL) python -m binary_pkg.os_information
 	$(TOOL) python -m binary_pkg.cmdline --config sage.yaml --info
 
