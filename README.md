@@ -16,8 +16,12 @@ have to do is run
 
     make package-sage
 
-This creates a tarball with an added ``relocate-once.py`` file that patches
-any hard-coded paths.
+This creates a tarball with an added ``relocate-once.py`` file that
+patches any hard-coded paths. If there are more than one packaging
+configurations (see below), then the first one is used by default. Use
+the ``PACKAGE`` variable to pick another one, for example
+
+    make package-sage PACKAGE="OSX DMG image"
 
 
 Configuration Syntax

@@ -27,7 +27,10 @@ def make_parser():
                         help='debug')
     parser.add_argument('--log', dest='log', default=None,
                         help='one of [DEBUG, INFO, ERROR, WARNING, CRITICAL]')
-    parser.add_argument('--config', required=True, help='Configuration yaml file')  
+    parser.add_argument('--config', required=True, help='Configuration yaml file')
+    parser.add_argument('--package', default='',
+                        help='name of the package section (in the Configuration yaml file)'
+                             ' to create. Only used in stage and dist steps.')
     parser.add_argument('--checkout', default=False, action='store_true',
                         help='Checkout source')  
     parser.add_argument('--build', default=False, action='store_true',
@@ -41,6 +44,17 @@ def make_parser():
     return parser
 
 
+def pick_package(config, package_name):
+    if not package_name:
+        return config.package[0]
+    for package in config.package:
+        if package.name == package_name:
+            log.debug('Package {0} matches {1}'.format(package.name, package_name))
+            return package
+        log.debug('Package {0} does not match {1}'.format(package.name, package_name))
+    raise ValueError('Unknown package name: {0}'.format(package_name))
+
+
 def launch():
     parser = make_parser()
     args = parser.parse_args(sys.argv[1:])
@@ -49,16 +63,15 @@ def launch():
         level = getattr(logging, args.log)
         log.setLevel(level=level)
     config = Configuration(args.config)
-    if args.info:
-        print(config)
     if args.checkout:
         git_clone(config)
     if args.build:
         config.build_script.run()
+    package = pick_package(config, args.package)
     if args.stage:
-        Packager(config, config.package[0]).copy().strip().save_relocate_script()
+        Packager(config, package).copy().strip().save_relocate_script()
     if args.dist:
-        config.package[0].dist_script.run()
+        package.dist_script.run()
 
         
 if __name__ == '__main__':

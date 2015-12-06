@@ -7,7 +7,6 @@ $(TOOL):
 	./tools/bootstrap/bin/python3 ./tools/toolaid/bin/toolaid --build tools/binary-pkg.yaml
 
 
-
 .PHONY: bootstrap shell test clean info
 
 checkout-%: %.yaml $(TOOL)
@@ -17,10 +16,10 @@ build-%: %.yaml $(TOOL)
 	$(TOOL) python -m binary_pkg.cmdline --config $< --build
 
 stage-%: %.yaml $(TOOL)
-	$(TOOL) python -m binary_pkg.cmdline --config $< --stage
+	$(TOOL) python -m binary_pkg.cmdline --config $< --stage --package $(PACKAGE)
 
 dist-%: %.yaml $(TOOL)
-	$(TOOL) python -m binary_pkg.cmdline --config $< --dist
+	$(TOOL) python -m binary_pkg.cmdline --config $< --dist --package $(PACKAGE)
 
 
 package-%: %.yaml
@@ -47,3 +46,4 @@ distclean: clean
 	rm -rf tools/bootstrap tools/binary-pkg
 	rm -rf tools/toolaid/bootstrap-files/hashdist
 	rm -rf tools/toolaid/bootstrap-files/hashstack
+
