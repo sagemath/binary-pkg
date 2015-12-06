@@ -17,7 +17,7 @@ package:
   - name: Full binary tarball
     dist: |
         tar cjf {dist}/sage-{version}-{osname}-{arch}.tar.bz2 {path}
-    files:
+    files: &FILES_DEFAULT
       - include: '**'
       - exclude: '**.pyc'
       - exclude: '**.pyo'
@@ -27,7 +27,7 @@ package:
       - exclude: src/build/temp.*/**
       - exclude: logs/**
       - exclude: config.log
-    rewrite_path:
+    rewrite_path: &REWRITE_PATH_DEFAULT
       - exclude: '**/*dvi'          # pascal strings?
       - exclude: 'local/lib/*.a'
       - exclude: local/lib/ecl-*/help.doc
@@ -38,6 +38,7 @@ package:
     files:
       - include: '**'
       - exclude: '**.pyc'
+      - exclude: '**.pyo'
       - exclude: upstream/**
       - exclude: logs/**
       - exclude: config.log
@@ -45,8 +46,12 @@ package:
       - exclude: src/**
       - exclude: local/lib/**.a
       - exclude: .git/**
-    rewrite_path:
-      - exclude: '**/*.dvi'
-      - exclude: 'local/lib/*.a'
-      - exclude: local/lib/ecl-*/help.doc
+    rewrite_path: *REWRITE_PATH_DEFAULT
     strip: True
+
+  - name: OSX DMG image
+    dist: |
+          hdiutil create -srcfolder {path} -format UDBZ sage-{version}-{osname}-{arch}.dmg
+    files: *FILES_DEFAULT
+    rewrite_path: *REWRITE_PATH_DEFAULT
+          
