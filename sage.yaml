@@ -51,7 +51,16 @@ package:
 
   - name: OSX DMG image
     dist: |
-          hdiutil create -srcfolder {path} -format UDBZ sage-{version}-{osname}-{arch}.dmg
+          hdiutil create -srcfolder {path} -format UDBZ {dist}/sage-{version}-{osname}-{arch}.dmg
     files: *FILES_DEFAULT
     rewrite_path: *REWRITE_PATH_DEFAULT
-          
+
+  - name: OSX Mac App
+    dist: |
+          pwd
+          cp sage-osx-makefile {path}/src/mac-app
+          cd {path}/src/mac-app && make
+          cp {path}/src/mac-app/sage*.app.dmg {dist}/
+    files: *FILES_DEFAULT
+    rewrite_path: *REWRITE_PATH_DEFAULT
+    

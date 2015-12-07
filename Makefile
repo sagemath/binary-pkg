@@ -16,10 +16,10 @@ build-%: %.yaml $(TOOL)
 	$(TOOL) python -m binary_pkg.cmdline --config $< --build
 
 stage-%: %.yaml $(TOOL)
-	$(TOOL) python -m binary_pkg.cmdline --config $< --stage --package $(PACKAGE)
+	$(TOOL) python -m binary_pkg.cmdline --config $< --stage --package "$(PACKAGE)"
 
 dist-%: %.yaml $(TOOL)
-	$(TOOL) python -m binary_pkg.cmdline --config $< --dist --package $(PACKAGE)
+	$(TOOL) python -m binary_pkg.cmdline --config $< --dist --package "$(PACKAGE)"
 
 
 package-%: %.yaml
