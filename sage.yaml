@@ -69,7 +69,7 @@ package:
           rm -f $DMG
           pwd
           cp ../../sage-osx-makefile {path}/src/mac-app/Makefile
-          cd {path}/src/mac-app && make
+          (cd {path}/src/mac-app && make)
           cp {path}/src/mac-app/sage-{version}-*.app.dmg $DMG
     files: *FILES_DEFAULT
     rewrite_path: *REWRITE_PATH_DEFAULT
