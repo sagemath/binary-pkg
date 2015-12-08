@@ -46,6 +46,7 @@ class SearchAndReplace(object):
         self.replace = replace.encode('utf-8')
 
     def __call__(self, filename):
+        filename = os.path.join(self.replace, filename)
         print('patching {0}'.format(filename))
         return FilePatch(self, filename)
     

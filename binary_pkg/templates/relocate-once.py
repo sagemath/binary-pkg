@@ -8,10 +8,13 @@ different location.
 
 import os
 
+ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+
+
 {% include 'patch.py' %}
 
         
-p = SearchAndReplace('{{search_string}}', os.path.dirname(__file__))
+p = SearchAndReplace('{{search_string}}', ROOT_PATH)
 
 {% for filename, patches in patches.items() %}
     {% if isinstance(patches, SearchReplacePatch) %}
