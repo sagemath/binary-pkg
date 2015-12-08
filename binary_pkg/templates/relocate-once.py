@@ -11,7 +11,7 @@ import os
 {% include 'patch.py' %}
 
         
-p = SearchAndReplace('{{search_string}}', os.getcwd())
+p = SearchAndReplace('{{search_string}}', os.path.dirname(__file__))
 
 {% for filename, patches in patches.items() %}
     {% if isinstance(patches, SearchReplacePatch) %}
