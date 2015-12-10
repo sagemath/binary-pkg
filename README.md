@@ -3,7 +3,8 @@ Binary Packaging
 
 This utility helps with creating binaries for distribution. Similar to
 conda, it builds the source tree in a long directory name which is
-then patched at install time. 
+then patched at install time. It is written for Sage
+(http://www.sagemath.org) but equally work for other software.
 
 
 Usage
@@ -27,8 +28,9 @@ the ``PACKAGE`` variable to pick another one, for example
 Configuration Syntax
 --------------------
 
-As a simplified example, let us look at the test application in the
-test.yaml file. It starts with the name:
+Binary packaging information can be specified with a YAML
+configuration file. As a simplified example, let us look at the test
+application in the test.yaml file. It starts with the name:
 
     name: PackagingTest
 
@@ -72,4 +74,13 @@ read from the bottom up. That is, later directives override earlier
 ones. The `rewrite_path` section defines a subset of the files that
 are to be ignored when rewriting hard-coded paths. In this example,
 all files are included but paths in static archives are not patched.
+
+
+Auxiliary Make Targets
+----------------------
+
+Any ``*.mk`` file in the root directory will be included in the
+``Makefile`` for recurring build targets.
+
+
 

@@ -47,3 +47,6 @@ distclean: clean
 	rm -rf tools/toolaid/bootstrap-files/hashdist
 	rm -rf tools/toolaid/bootstrap-files/hashstack
 
+
+include *.mk
+
