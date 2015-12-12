@@ -19,6 +19,12 @@ class TestFileFilter(unittest.TestCase):
         ff.include('**/*want')
         self.assertEqual(
             ff.sorted(),
-            [os.path.join(self.DATA, 'a/a_want'), os.path.join(self.DATA, 'a/b/b_want'),
-             os.path.join(self.DATA, 'root_ignore'), os.path.join(self.DATA, 'root_want')]
+            [
+                os.path.join(self.DATA, 'a'),
+                os.path.join(self.DATA, 'a/a_want'),
+                os.path.join(self.DATA, 'a/b'),
+                os.path.join(self.DATA, 'a/b/b_want'),
+                os.path.join(self.DATA, 'a/link'),
+                os.path.join(self.DATA, 'root_ignore'),
+                os.path.join(self.DATA, 'root_want')]
         )

@@ -1,20 +1,31 @@
 
 
 import platform
+import string
+
+
+def filename_sanitize(s):
+    """
+    Sanitize the string so that it can be used as a part of a filename
+    """
+    allowed = string.ascii_letters + string.digits + '_'
+    def escape(ch):
+        return ch if ch in allowed else '_'
+    return ''.join([escape(ch) for ch in s])
 
 
 def osname():
     distname, version, extra = platform.linux_distribution()
     if distname:
-        return '{0}_{1}'.format(distname, version)
+        return filename_sanitize('{0}_{1}'.format(distname, version))
     osx_version, empty, arch = platform.mac_ver()
     if osx_version:
-        return 'OSX_{0}'.format(osx_version)
+        return filename_sanitize('OSX_{0}'.format(osx_version))
     raise RuntimeError('unknown distribution / os')
         
 
 def arch():
-    return platform.machine()
+    return filename_sanitize(platform.machine())
 
 
 

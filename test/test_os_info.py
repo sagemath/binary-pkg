@@ -2,7 +2,7 @@
 import re
 import os
 import unittest
-from binary_pkg.os_information import osname, arch
+from binary_pkg.os_information import osname, arch, filename_sanitize
 
 
 
@@ -17,3 +17,10 @@ class TestOsInformation(unittest.TestCase):
         self.assertIn(osname(), [
             'Fedora_23', 'OSX_10.11.1',
         ])
+
+    def test_filename_sanitize(self):
+        self.assertEqual(filename_sanitize('Fedora'), 'Fedora')
+        self.assertEqual(filename_sanitize('23'), '23')
+        self.assertEqual(filename_sanitize('debian'), 'debian')
+        self.assertEqual(filename_sanitize('jesse/sid'), 'jesse_sid')
+        
