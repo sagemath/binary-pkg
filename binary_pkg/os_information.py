@@ -9,7 +9,7 @@ def filename_sanitize(s):
     """
     Sanitize the string so that it can be used as a part of a filename
     """
-    allowed = string.ascii_letters + string.digits + '_'
+    allowed = string.ascii_letters + string.digits + '._-'
     def escape(ch):
         return ch if ch in allowed else '_'
     return ''.join([escape(ch) for ch in s])
