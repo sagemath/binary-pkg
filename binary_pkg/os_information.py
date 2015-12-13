@@ -1,6 +1,7 @@
 
 
 import platform
+import ld
 import string
 
 
@@ -15,7 +16,7 @@ def filename_sanitize(s):
 
 
 def osname():
-    distname, version, extra = platform.linux_distribution()
+    distname, version, extra = ld.linux_distribution()
     if distname:
         return filename_sanitize('{0}_{1}'.format(distname, version))
     osx_version, empty, arch = platform.mac_ver()
