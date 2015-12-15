@@ -44,6 +44,10 @@ class SearchAndReplace(object):
     def __init__(self, search, replace):
         self.search = search.encode('utf-8')
         self.replace = replace.encode('utf-8')
+        if len(self.search) < len(self.replace):
+            raise RuntimeError(
+                'path can be at most {0} characters long, but {1} has {2} characters'.format(
+                    len(self.search), self.replace, len(self.replace)))
 
     def __call__(self, filename):
         filename = os.path.join(self.replace, filename)

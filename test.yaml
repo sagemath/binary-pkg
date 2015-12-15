@@ -13,7 +13,7 @@ version: |
 
 package:
   - name: Full binary tarball
-    command: |
+    dist: |
         tar cjf {dist}/test-{version}-{osname}-{arch}.tar.bz2 {path}
     files:
       - include: '**'
