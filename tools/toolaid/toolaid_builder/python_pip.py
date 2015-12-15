@@ -20,7 +20,15 @@ class PythonPipBuilder(object):
         
     @property
     def pip_path(self):
-        return os.path.join(self.config.target_directory, 'bin', 'pip')
+        pip = os.path.join(self.config.target_directory, 'bin', 'pip')
+        if os.path.exists(pip):
+            return pip
+        # Python 3.4+ bundles pip3
+        pip3 = os.path.join(self.config.target_directory, 'bin', 'pip3')
+        if os.path.exists(pip3):
+            return pip3
+        raise RuntimeError('pip is not installed at {0}'.format(
+            os.path.join(self.config.target_directory, 'bin')))
 
     @property
     def env(self):
