@@ -221,14 +221,18 @@ class Packager(object):
                 log.debug('Symlink {0}'.format(relative))
                 mkdir_p(os.path.dirname(dst))
                 linkto = os.readlink(src)
-                relative_dir = os.path.relpath(os.path.dirname(linkto), os.path.dirname(src))
+                if not os.path.isabs(linkto):   # make linkto absolute path
+                    linkto = os.path.join(os.path.dirname(src), linkto)
+                relative_dir = os.path.relpath(
+                    os.path.dirname(linkto),
+                    os.path.dirname(src)
+                )
                 relative_file = os.path.join(relative_dir, os.path.basename(linkto))
                 os.symlink(relative_file, dst)
-                shutil.copystat(src, dst)
             elif os.path.isdir(src):
                 log.debug('Directory {0}'.format(relative))
                 mkdir_p(dst)
-                shutil.copystat(src, dst)
+                self.copy_mtime(src, dst)
             elif os.path.isfile(src):
                 f = InstallFile(src, dst)
                 f.copy()
@@ -239,9 +243,9 @@ class Packager(object):
                         self._patch[relative] = patch
                 else:
                     log.debug('Copying {0}, ignoring path'.format(relative))
+                self.copy_mtime(src, dst)
             else:
                 raise ValueError('{0} is not a file, symlink, or directory'.format(relative))
-            self.copy_mtime(src, dst)
         self.print_patch_summary()
         return self
 

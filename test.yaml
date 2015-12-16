@@ -9,8 +9,9 @@ build: |
     make
     echo "creating absolute symlink"
     mkdir subdirectory
-    ln -s $(pwd)/README subdirectory/README-link
-    ln -s $(pwd)/README README-link
+    ln -s $(pwd)/README subdirectory/README-link-sub
+    ln -s $(pwd)/README README-link-abs
+    ln -s README README-link-rel
 
 version: |
     echo 1.0
