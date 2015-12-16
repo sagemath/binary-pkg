@@ -7,6 +7,10 @@ build: |
     autoreconf -vfi
     ./configure
     make
+    echo "creating absolute symlink"
+    mkdir subdirectory
+    ln -s $(pwd)/README subdirectory/README-link
+    ln -s $(pwd)/README README-link
 
 version: |
     echo 1.0

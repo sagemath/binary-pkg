@@ -5,6 +5,7 @@ class FilePatch(object):
         self.search = search_and_replace.search
         self.replace = search_and_replace.replace
         self.filename = filename
+        self.st = os.stat(filename)
         with open(self.filename, 'rb') as f:
             self.content = f.read()
 
@@ -36,6 +37,7 @@ class FilePatch(object):
     def save(self):
         with open(self.filename, 'wb') as f:
             f.write(self.content)
+        os.utime(self.filename, (self.st.st_atime, self.st.st_mtime))
 
         
         

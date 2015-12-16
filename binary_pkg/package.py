@@ -168,10 +168,21 @@ class Packager(object):
 
     @property
     def source(self):
+        """
+        Return the source directory
+
+        This is where the application was built
+        """
         return self._config.source_path
 
     @property
     def staging(self):
+        """
+        Return the staging directory
+
+        This is the directory containing the binaries that will be
+        distributed, e.g. as tar.bz2 file.
+        """
         return self._package_config.staging_path
 
     @property
@@ -187,6 +198,17 @@ class Packager(object):
         return self._package_config
 
     def copy(self):
+        """
+        Copy files from source to staging
+        
+        Only files that are included by the configuration yaml file
+        (in the ``files:`` section) are copied.
+
+        * Symlinks are turned into relative symlinks
+        * File modification times are preserved
+        * File are searched for hardcoded paths and any matches are is recorded.
+        * Directories are recreated, even if empty
+        """
         shutil.rmtree(self.root, ignore_errors=True)
         mkdir_p(self.root)
         marker = self.source.encode('utf-8')
@@ -199,10 +221,14 @@ class Packager(object):
                 log.debug('Symlink {0}'.format(relative))
                 mkdir_p(os.path.dirname(dst))
                 linkto = os.readlink(src)
-                os.symlink(linkto, dst)
+                relative_dir = os.path.relpath(os.path.dirname(linkto), os.path.dirname(src))
+                relative_file = os.path.join(relative_dir, os.path.basename(linkto))
+                os.symlink(relative_file, dst)
+                shutil.copystat(src, dst)
             elif os.path.isdir(src):
                 log.debug('Directory {0}'.format(relative))
                 mkdir_p(dst)
+                shutil.copystat(src, dst)
             elif os.path.isfile(src):
                 f = InstallFile(src, dst)
                 f.copy()
@@ -214,9 +240,17 @@ class Packager(object):
                 else:
                     log.debug('Copying {0}, ignoring path'.format(relative))
             else:
-                assert False, 'special file'
+                raise ValueError('{0} is not a file, symlink, or directory'.format(relative))
+            self.copy_mtime(src, dst)
         self.print_patch_summary()
         return self
+
+    def copy_mtime(self, src, dst):
+        """
+        Copy the file modification time using nanosecond granularity
+        """
+        st = os.stat(src)
+        os.utime(dst, ns=(st.st_atime_ns, st.st_mtime_ns))
     
     def print_patch_summary(self):
         filenames = sorted(self._patch.keys())
@@ -224,8 +258,10 @@ class Packager(object):
             patch = self._patch[filename]
             print('- {0}: {1}'.format(filename, patch))
     
-    
     def strip(self):
+        """
+        Strip the executables in the staging directory
+        """
         log.critical('todo: strip')
         return self
 
