@@ -13,6 +13,12 @@ ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 
 {% include 'patch.py' %}
 
+print("""
+Rewriting paths for your new installation directory
+===================================================
+
+This might take a few minutes but only has to be done once.
+""")
         
 p = SearchAndReplace('{{search_string}}', ROOT_PATH)
 
