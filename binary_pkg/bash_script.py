@@ -3,6 +3,9 @@ import os
 import tempfile
 import subprocess
 
+import logging
+log = logging.getLogger()
+
 
 
 class BashScript(object):
@@ -19,8 +22,18 @@ class BashScript(object):
         return self._source_code
             
     def run(self):
-        subprocess.check_call(['bash', self._filename], cwd=self._cwd)
+        try:
+            subprocess.check_call(['bash', self._filename], cwd=self._cwd)
+        except subprocess.CalledProcessError:
+            log.error('Script failed:')
+            log.error(self._source_code)
+            raise
         
     def output(self):
-        stdout = subprocess.check_output(['bash', self._filename], cwd=self._cwd)
+        try:
+            stdout = subprocess.check_output(['bash', self._filename], cwd=self._cwd)
+        except subprocess.CalledProcessError:
+            log.error('Script failed:')
+            log.error(self._source_code)
+            raise
         return stdout.strip().decode('utf-8')
