@@ -6,10 +6,25 @@ This script can be used exactly once to move the directory to a
 different location.
 """
 
-import os
+import os, getopt, sys
 
-ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+def usage():
+    print "relocate-once.py -d <destination>"
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "hd:", ["help", "destination="])
+except getopt.GetoptError:
+    usage()
+    sys.exit(2)
+for opt, arg in opts:
+    if opt in ('-h', '--help'):
+        usage()
+    elif opt in ('-d', '--destination'):
+        ROOT_PATH = arg
 
+try:
+    ROOT_PATH
+except NameError:
+    ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 
 {% include 'patch.py' %}
 
