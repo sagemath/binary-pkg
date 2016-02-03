@@ -13,6 +13,8 @@ python-pip:
   pyyaml:
   glob2:
   jinja2:
-  "https://github.com/nir0s/ld/zipball/master": 
+  ld: '>=0.2.9'
+  
+#  "https://github.com/nir0s/ld/zipball/master": 
 #  ld: https://github.com/nir0s/ld.git
 
