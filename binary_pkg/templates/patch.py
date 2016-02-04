@@ -43,7 +43,8 @@ class FilePatch(object):
         
 class SearchAndReplace(object):
 
-    def __init__(self, search, replace):
+    def __init__(self, root_path, search, replace):
+        self.root_path = root_path.encode('utf-8')
         self.search = search.encode('utf-8')
         self.replace = replace.encode('utf-8')
         if len(self.search) < len(self.replace):
@@ -52,7 +53,7 @@ class SearchAndReplace(object):
                     len(self.search), self.replace, len(self.replace)))
 
     def __call__(self, filename):
-        filename = os.path.join(self.replace, filename)
+        filename = os.path.join(self.root_path, filename)
         print('patching {0}'.format(filename))
         return FilePatch(self, filename)
     
