@@ -1,12 +1,13 @@
 name: PackagingTest
 
-repository: https://github.com/octol/minimal-gtest-autotools
+repository: https://github.com/sagemath/binary-pkg-test
 branch: master
 
 build: |
-    autoreconf -vfi
-    ./configure
+    ./bootstrap
+    ./configure --prefix=$(pwd)/local
     make
+    make install
     echo "creating absolute symlink"
     mkdir subdirectory
     ln -s $(pwd)/README subdirectory/README-link-sub

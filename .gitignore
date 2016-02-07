@@ -4,7 +4,7 @@
 *.pyo
 *.pyc
 __pycache__
-/source/
-/tmp/
-/staging/
-/dist/
+/source
+/tmp
+/staging
+/dist

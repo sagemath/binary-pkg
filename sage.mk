@@ -1,11 +1,11 @@
 
 
 bdist-sage-linux: 
-	@echo "Sage Binary Packages"
+	@echo "Sage Binary Packages for Generic Linux"
 	$(MAKE) package-sage
 
 bdist-sage-osx:
-	@echo "Sage Binary Packages"
+	@echo "Sage Binary Packages for OSX"
 	$(MAKE) checkout-sage
 	$(MAKE) build-sage
 	$(MAKE) stage-sage PACKAGE="Full binary tarball"

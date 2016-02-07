@@ -39,8 +39,15 @@ info: $(TOOL)
 	$(TOOL) python -m binary_pkg.os_information
 	$(TOOL) python -m binary_pkg.cmdline --config sage.yaml --info
 
+transient: clean
+	rm -rf /tmp/binary-pkg
+	for d in source build staging dist ; do \
+	    mkdir -p /tmp/binary-pkg/$$d && ln -s /tmp/binary-pkg/$$d $$d ; \
+	done	
+	@echo "--- Moved build directories to /tmp for development; Run make clean to switch back ---"
+
 clean:
-	rm -rf source build tmp dist
+	rm -rf staging source build tmp dist
 
 distclean: clean
 	rm -rf tools/bootstrap tools/binary-pkg

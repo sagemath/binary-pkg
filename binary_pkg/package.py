@@ -107,8 +107,9 @@ class InstallFile(object):
             log.warn('Suspicious binary terminators {0} in {1}'.format(
                 list(result.keys()), self._src))
         if self.has_zero() and text_terminator and not binary_terminator:
-            log.critical('Contains zero-terminated strings but marker is not, ignoring: {0}'
-                         .format(self._src))
+            # The rpath can be /foo:/marker:/usr/lib, for example in gp
+            log.warn('Contains zero-terminated strings but marker is not: {0}'
+                     .format(self._src))
             return dict()
         return result
             

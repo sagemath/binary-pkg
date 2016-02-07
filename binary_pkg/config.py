@@ -13,6 +13,9 @@ from binary_pkg.file_filter import FileFilter
 
 
 def filename_escape(name):
+    """
+    Escape any characters that are not safe for filenames
+    """
     def escape(ch):
         if ch in string.ascii_letters + string.digits:
             return ch
@@ -43,11 +46,12 @@ class PackageConfiguration(object):
         name = filename_escape(self.name)
         path = os.path.join(self._config.root_path, 'staging', name)
         mkdir_p(path)
-        return path
+        return os.path.realpath(path)
 
     @property
     def root_path(self):
-        return os.path.join(self.staging_path, filename_escape(self._config.name))
+        path = os.path.join(self.staging_path, filename_escape(self._config.name))
+        return os.path.realpath(path)
     
     def _expand_dist_script(self, template):
         return template.format(
@@ -94,6 +98,7 @@ class PackageConfiguration(object):
         self._rewrite_path_filter = ff
         return self._rewrite_path_filter
 
+    
 class Configuration(object):
 
     def __init__(self, filename):
@@ -103,25 +108,26 @@ class Configuration(object):
             
     @property
     def root_path(self):
-        return os.path.dirname(os.path.abspath(self._filename))
+        path = os.path.dirname(os.path.abspath(self._filename))
+        return os.path.realpath(path)
 
     @property
     def dist_path(self):
         path = os.path.join(self.root_path, 'dist')
         mkdir_p(path)
-        return path
+        return os.path.realpath(path)
 
     @property
     def source_path(self):
         path = make_path(self.root_path, 'source', filename_escape(self.name))
         mkdir_p(path)
-        return path
+        return os.path.realpath(path)
     
     @property
     def tmp_path(self):
         path = os.path.join(self.root_path, 'tmp', filename_escape(self.name))
         mkdir_p(path)
-        return path
+        return os.path.realpath(path)
 
     @property
     def name(self):
