@@ -22,7 +22,7 @@ package:
       - exclude: '**.pyc'
       - exclude: '**.pyo'
       - exclude: upstream/**
-      - exclude: src/doc/output/doctrees/**   # weird string terminators
+      - exclude: local/share/doc/sage/doctrees/**   # weird string terminators
       - exclude: src/build/lib.*/**
       - exclude: src/build/temp.*/**
       - exclude: logs/**
