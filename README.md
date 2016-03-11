@@ -24,6 +24,7 @@ the ``PACKAGE`` variable to pick another one, for example
 
     make package-sage PACKAGE="OSX DMG image"
 
+In particular, see below for the different Mac packaging possibilities.
 
 Configuration Syntax
 --------------------
@@ -82,5 +83,18 @@ Auxiliary Make Targets
 Any ``*.mk`` file in the root directory will be included in the
 ``Makefile`` for recurring build targets.
 
+Mac Packaging Options
+---------------------
 
+There are three options for packaging Mac.  The default will simply
+create a ``.tar.gz`` file, which is usually not what one wants on Mac.
 
+To create a Mac disk image file of the normal Sage command line distribution,
+use this package option:
+
+    make package-sage PACKAGE="OSX DMG image"
+
+To create a Mac disk image file of the Mac app bundle with menu items and
+which automatically launches a notebook, use
+
+    make package-sage PACKAGE="OSX mac app"
