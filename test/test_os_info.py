@@ -15,7 +15,7 @@ class TestOsInformation(unittest.TestCase):
 
     def test_osname(self):
         self.assertIn(osname(), [
-            'Fedora_23', 'OSX_10.11.1',
+            'Fedora_23', 'OSX_10.11.3',
         ])
 
     def test_filename_sanitize(self):
