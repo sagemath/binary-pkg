@@ -68,7 +68,6 @@ package:
           DMG={dist}/sage-{version}-{osname}-{arch}.app.dmg
           rm -f $DMG
           pwd
-          cp ../../sage-osx-makefile {path}/src/mac-app/Makefile
           (cd {path}/src/mac-app && make)
           cp {path}/src/mac-app/sage-{version}-*.app.dmg $DMG
     files: *FILES_DEFAULT
