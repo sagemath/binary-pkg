@@ -1,3 +1,18 @@
+TL;DR
+=====
+
+To build Sage binaries, just clone this repository and run
+
+    git clone https://github.com/sagemath/binary-pkg.git
+    cd binary-pkg
+    make bdist-sage-linux     # If you are on Linux
+    make bdist-sage-osx       # If you are on OSX
+    ls dist/                  # Built binaries will be in this directory
+
+Edit `sage.yaml` if you want to build something else than the current
+Sage `develop` git branch.
+
+
 Binary Packaging
 ================
 
