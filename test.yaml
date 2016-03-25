@@ -13,6 +13,7 @@ build: |
     ln -s $(pwd)/README subdirectory/README-link-sub
     ln -s $(pwd)/README README-link-abs
     ln -s README README-link-rel
+    echo $PATH > path.txt
 
 version: |
     echo 1.0

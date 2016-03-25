@@ -1,0 +1,20 @@
+name: HelloWorld
+
+repository: https://github.com/sagemath/binary-pkg-test
+branch: master
+
+build: |
+    echo "Hello World"
+    echo $PATH
+
+version: |
+    echo 1.0
+
+package:
+  - name: Full binary tarball
+    dist: |
+        tar cjf {dist}/test-{version}-{osname}-{arch}.tar.bz2 {path}
+    files:
+      - include: '**'
+    rewrite_path:
+      - exclude: '**/*.a'

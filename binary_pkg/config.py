@@ -10,6 +10,7 @@ from binary_pkg.bash_script import BashScript
 from binary_pkg.file_util import mkdir_p
 from binary_pkg.os_information import osname, arch
 from binary_pkg.file_filter import FileFilter
+from binary_pkg.search_path import safe_search_path
 
 
 def filename_escape(name):
@@ -65,7 +66,8 @@ class PackageConfiguration(object):
     @property
     def dist_script(self):
         script = self._expand_dist_script(self._data['dist'])
-        return BashScript(script, self._config.tmp_path, cwd=self.staging_path)
+        return BashScript(script, self._config.tmp_path,
+                          cwd=self.staging_path, PATH=self._config._PATH)
     
     def files(self):
         if self._files is not None:
@@ -105,6 +107,7 @@ class Configuration(object):
         self._filename = str(filename)
         with open(filename, 'r') as f:
             self._data = yaml.safe_load(f.read())
+        self._PATH = safe_search_path(self.root_path)
             
     @property
     def root_path(self):
@@ -149,7 +152,8 @@ class Configuration(object):
     @property
     def build_script(self):
         script = self._expand_build_script(self._data['build'])
-        return BashScript(script, self.tmp_path, cwd=self.source_path)
+        return BashScript(script, self.tmp_path,
+                          cwd=self.source_path, PATH=self._PATH)
 
     @property
     def package(self):
@@ -157,7 +161,8 @@ class Configuration(object):
 
     @property
     def version(self):
-        return BashScript(self._data['version'], self.tmp_path, cwd=self.source_path).output()
+        return BashScript(self._data['version'], self.tmp_path,
+                          cwd=self.source_path, PATH=self._PATH).output()
 
     def __repr__(self):
         result = textwrap.dedent("""

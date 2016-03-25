@@ -10,8 +10,9 @@ log = logging.getLogger()
 
 class BashScript(object):
 
-    def __init__(self, source_code, tmp_path, cwd=None):
+    def __init__(self, source_code, tmp_path, cwd=None, PATH=None):
         self._cwd = cwd
+        self._PATH = PATH
         fd, self._filename = tempfile.mkstemp(dir=tmp_path, suffix='.sh')
         os.close(fd)
         self._source_code = source_code
@@ -20,10 +21,20 @@ class BashScript(object):
             
     def __repr__(self):
         return self._source_code
-            
+
+    def env(self):
+        """
+        Return the environment that the scripts are run with.
+        """
+        env = dict(os.environ)
+        if self._PATH:
+            env['PATH'] = self._PATH        
+        return env
+    
     def run(self):
         try:
-            subprocess.check_call(['bash', self._filename], cwd=self._cwd)
+            subprocess.check_call(
+                ['bash', self._filename], cwd=self._cwd, env=self.env())
         except subprocess.CalledProcessError:
             log.error('Script failed:')
             log.error(self._source_code)
@@ -31,7 +42,8 @@ class BashScript(object):
         
     def output(self):
         try:
-            stdout = subprocess.check_output(['bash', self._filename], cwd=self._cwd)
+            stdout = subprocess.check_output(
+                ['bash', self._filename], cwd=self._cwd, env=self.env())
         except subprocess.CalledProcessError:
             log.error('Script failed:')
             log.error(self._source_code)
