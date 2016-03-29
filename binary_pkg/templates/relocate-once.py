@@ -9,7 +9,7 @@ different location.
 import os, getopt, sys
 
 def usage():
-    print "relocate-once.py -d <destination>"
+    print("relocate-once.py -d <destination>")
     
 
 try:
