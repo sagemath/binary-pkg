@@ -7,7 +7,7 @@ build: |
     export SAGE_FAT_BINARY=yes
     export SAGE_PARALLEL_SPKG_BUILD=yes
     export MAKE='make -j{ncpu}'
-    make
+    make || exit 1
     git gc --aggressive --prune=now
 
 version: |
