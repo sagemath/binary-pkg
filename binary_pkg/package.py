@@ -90,6 +90,14 @@ class InstallFile(object):
             start += len(marker)   # cannot have overlapping markers
 
     def find_terminators(self, marker):
+        """
+        Find positions of marker in the file
+        
+        Returns:
+            dict: the keys are the terminators (byte after the marker, see ``ALL_TERMINATORS``) and
+            the corresponding value is a tuple of start indices. Lists the start indices of the
+            marker with the given terminator.
+        """
         result = dict()
         binary_terminator = False
         text_terminator = False
@@ -110,7 +118,8 @@ class InstallFile(object):
             # The rpath can be /foo:/marker:/usr/lib, for example in gp
             log.warn('Contains zero-terminated strings but marker is not: {0}'
                      .format(self._src))
-            return dict()
+            # Pretend that we found zero terminators, see :meth:`find_patch`
+            result[b'\0'] = tuple()
         return result
             
     def _find_terminator(self, marker, start, terminators):
