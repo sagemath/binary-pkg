@@ -1,21 +1,16 @@
-hashstack:
-  parameters:
-    pyver: '3.4'
-  packages:
-    launcher:
-    python:
-      use_host: false
-    pip:
-    yaml:
-    openssl:
+# Runtime dependencies
 
-python-pip:
-  ipython:
-  pyyaml:
-  glob2:
-  jinja2:
-  ld: '>=0.2.9'
-  
-#  "https://github.com/nir0s/ld/zipball/master": 
-#  ld: https://github.com/nir0s/ld.git
+name: run
+
+channels:
+ - conda-forge
+
+dependencies:
+  - python>=3.6
+  - pyyaml
+  - pip:
+      - ipython
+      - glob2
+      - jinja2
+      - ld
 
