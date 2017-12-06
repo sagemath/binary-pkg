@@ -1,25 +1,33 @@
 export REPO_ROOT:=$(shell git rev-parse --show-toplevel)
-export TOOL:=$(REPO_ROOT)/tools/binary-pkg/activate
+export CONDA:=$(REPO_ROOT)/tools/bootstrap/miniconda/bin/conda
+export TOOL:=$(REPO_ROOT)/tools/binary-pkg/bin
 
 
-$(TOOL):
-	./tools/toolaid/bootstrap
-	./tools/bootstrap/bin/python3 ./tools/toolaid/bin/toolaid --build tools/binary-pkg.yaml
+$(CONDA):
+	./tools/bootstrap/bootstrap.sh
 
+$(TOOL): $(CONDA)
+	$(CONDA) env create -p tools/binary-pkg -f tools/binary-pkg.yaml
 
-.PHONY: bootstrap shell test clean info
+install-tools: $(TOOL)
+
+install-clean:
+	rm -rf tools/binary-pkg
+	rm -rf tools/bootstrap/miniconda
+
+.PHONY: install-tools install-clean
 
 checkout-%: %.yaml $(TOOL)
-	$(TOOL) python -m binary_pkg.cmdline --config $< --checkout
+	$(TOOL)/python -m binary_pkg.cmdline --config $< --checkout
 
 build-%: %.yaml $(TOOL)
-	$(TOOL) python -m binary_pkg.cmdline --config $< --build
+	$(TOOL)/python -m binary_pkg.cmdline --config $< --build
 
 stage-%: %.yaml $(TOOL)
-	$(TOOL) python -m binary_pkg.cmdline --config $< --stage --package "$(PACKAGE)"
+	$(TOOL)/python -m binary_pkg.cmdline --config $< --stage --package "$(PACKAGE)"
 
 dist-%: %.yaml $(TOOL)
-	$(TOOL) python -m binary_pkg.cmdline --config $< --dist --package "$(PACKAGE)"
+	$(TOOL)/python -m binary_pkg.cmdline --config $< --dist --package "$(PACKAGE)"
 
 
 package-%: %.yaml
@@ -30,14 +38,14 @@ package-%: %.yaml
 
 
 shell: $(TOOL)
-	$(TOOL) ipython
+	$(TOOL)/ipython
 
 test: $(TOOL)
-	$(TOOL) python -m unittest discover
+	$(TOOL)/python -m unittest discover
 
 info: $(TOOL)
-	$(TOOL) python -m binary_pkg.os_information
-	$(TOOL) python -m binary_pkg.cmdline --config sage.yaml --info
+	$(TOOL)/python -m binary_pkg.os_information
+	$(TOOL)/python -m binary_pkg.cmdline --config sage.yaml --info
 
 transient: clean
 	rm -rf /tmp/binary-pkg
@@ -49,10 +57,9 @@ transient: clean
 clean:
 	rm -rf staging source build tmp dist
 
-distclean: clean
-	rm -rf tools/bootstrap tools/binary-pkg
-	rm -rf tools/toolaid/bootstrap-files/hashdist
-	rm -rf tools/toolaid/bootstrap-files/hashstack
+distclean: clean install-clean
+
+.PHONY: shell test info transient clean distclean
 
 
 include *.mk
