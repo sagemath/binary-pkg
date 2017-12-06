@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-MINICONDA=Miniconda3-4.3.14
+MINICONDA=Miniconda3-4.3.30
 
 
 set -e
@@ -24,7 +24,19 @@ if [ -d "$BOOTSTRAP"/miniconda/envs/bootstrap ]; then
 fi
 
 
-DOWNLOAD_URL=https://repo.continuum.io/miniconda/$MINICONDA-Linux-x86_64.sh
+case "$(uname -s)-$(uname -m)" in
+    Darwin-x86_64)
+	ARCH=MacOSX-x86_64 ;;
+    Linux-x86_64)
+	ARCH=Linux-x86_64 ;;
+    Linux-i*)
+	ARCH=Linux-x86 ;;
+    *)
+	echo 'Unknown architecture'
+	exit 1
+esac
+
+DOWNLOAD_URL=https://repo.continuum.io/miniconda/$MINICONDA-$ARCH.sh
 
 mkdir -p "$BOOTSTRAP"
 curl -o "$BOOTSTRAP"/$MINICONDA.sh $DOWNLOAD_URL
