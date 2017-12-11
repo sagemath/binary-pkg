@@ -39,8 +39,7 @@ esac
 DOWNLOAD_URL=https://repo.continuum.io/miniconda/$MINICONDA-$ARCH.sh
 
 mkdir -p "$BOOTSTRAP"
-curl -o "$BOOTSTRAP"/$MINICONDA.sh $DOWNLOAD_URL
-# wget -O "$BOOTSTRAP"/$MINICONDA.sh $DOWNLOAD_URL
+"$BOOTSTRAP"/download.py "$BOOTSTRAP"/$MINICONDA.sh $DOWNLOAD_URL
 rm -rf "$BOOTSTRAP"/miniconda
 bash "$BOOTSTRAP"/$MINICONDA.sh -b -p "$BOOTSTRAP"/miniconda
 
