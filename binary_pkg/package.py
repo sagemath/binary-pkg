@@ -85,7 +85,7 @@ class InstallFile(object):
         while True:
             start = content.find(marker, start)
             if start == -1:
-                raise StopIteration
+                return
             yield start
             start += len(marker)   # cannot have overlapping markers
 
@@ -149,7 +149,7 @@ class InstallFile(object):
         while True:
             start = content.find(marker, start)
             if start == -1:
-                raise StopIteration
+                return
             end = start + len(marker)
             while end < len(content) and content[end:end+1] != b'\0':
                 end += 1
