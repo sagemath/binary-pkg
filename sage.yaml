@@ -5,9 +5,11 @@ branch: develop
 
 build: |
     export SAGE_FAT_BINARY=yes
-    # We need to install GCC because we need the gfortran library
-    # in the binary.
-    export SAGE_INSTALL_GCC=yes
+    if [ `uname` != "Darwin" ]; then
+        # We need to install GCC because we need the gfortran library
+        # in the binary.
+        export SAGE_INSTALL_GCC=yes
+    fi
     export MAKE='make -j{ncpu}'
     make || exit 1
     git gc --aggressive --prune=now
