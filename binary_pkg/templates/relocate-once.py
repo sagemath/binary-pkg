@@ -1,10 +1,13 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Rewrite Paths
 
 This script can be used exactly once to move the directory to a
 different location.
 """
+
+from __future__ import (absolute_import, division, print_function, unicode_literals)
 
 import os, getopt, sys
 
@@ -44,7 +47,11 @@ p = SearchAndReplace(ROOT_PATH, '{{search_string}}', DESTINATION)
     {% if isinstance(patches, SearchReplacePatch) %}
 p('{{filename}}').substitute().save()
     {% else %}
-p('{{filename}}'){% for patch in patches %}.patch({{patch.start}}, {{patch.end}}){% endfor %}.save()
+f = p('{{filename}}').binary()
+        {% for patch in patches %}
+f.patch({{patch.start}}, {{patch.end}})
+        {% endfor %}
+f.save()
     {% endif %}
 {% endfor %}
 
