@@ -34,7 +34,7 @@ class FileBinaryPatch(FileABC):
         """
         self.fh.seek(start)
         region = self.fh.read(end - start + 1)
-        assert region[-1] == b'\0'
+        assert region[-1:] == b'\0'
         substituted = region.replace(self.search, self.replace)
         substituted+= b'\0' * (end - start - len(substituted))
         self.fh.seek(start)
@@ -77,10 +77,10 @@ class FileProxy(object):
             self.search_and_replace, self.filename
         ).substitute()
         
-    def patch(self, start, end):
+    def binary(self):
         return FileBinaryPatch(
             self.search_and_replace, self.filename
-        ).patch(start, end)
+        )
 
         
 class SearchAndReplace(object):
@@ -94,7 +94,8 @@ class SearchAndReplace(object):
                 'path can be at most {0} characters long, but {1} has {2} characters'.format(
                     len(self.search), self.replace, len(self.replace)))
 
-    def __call__(self, filename):
+    def __call__(self, unicode_filename):
+        filename = unicode_filename.encode('utf-8')
         filename = os.path.join(self.root_path, filename)
         print('patching {0}'.format(filename))
         return FileProxy(self, filename)
