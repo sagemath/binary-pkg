@@ -7,6 +7,16 @@ MINICONDA=Miniconda3-4.3.30
 set -e
 # set -v
 
+# Find a python binary
+PYTHON2=$(which python)
+PYTHON3=$(which python3)
+if [ -n "$PYTHON2" ] ; then 
+    PYTHON=$PYTHON2
+else
+    PYTHON=$PYTHON3
+fi
+
+
 # This is the root dir
 DIR="$(pwd)"
 if [ -x "$DIR/binary_pkg" ] ; then
@@ -39,7 +49,7 @@ esac
 DOWNLOAD_URL=https://repo.continuum.io/miniconda/$MINICONDA-$ARCH.sh
 
 mkdir -p "$BOOTSTRAP"
-"$BOOTSTRAP"/download.py "$BOOTSTRAP"/$MINICONDA.sh $DOWNLOAD_URL
+$PYTHON "$BOOTSTRAP"/download.py "$BOOTSTRAP"/$MINICONDA.sh $DOWNLOAD_URL
 rm -rf "$BOOTSTRAP"/miniconda
 bash "$BOOTSTRAP"/$MINICONDA.sh -b -p "$BOOTSTRAP"/miniconda
 
