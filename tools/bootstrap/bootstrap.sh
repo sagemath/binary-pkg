@@ -8,8 +8,8 @@ set -e
 # set -v
 
 # Find a python binary
-PYTHON2=$(which python)
-PYTHON3=$(which python3)
+PYTHON2=$(which python) || true
+PYTHON3=$(which python3) || true
 if [ -n "$PYTHON2" ] ; then 
     PYTHON=$PYTHON2
 else
