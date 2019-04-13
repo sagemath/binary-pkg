@@ -17,10 +17,8 @@ import logging
 try:
     # Python 3
     import urllib.request as urllib
-    import urllib.parse as urlparse
 except ImportError:
     import urllib
-    import urlparse
 
 
 logging.basicConfig()

@@ -3,10 +3,11 @@
 Taken from sphinx
 """
 
-from __future__ import (absolute_import, division, print_function, unicode_literals)
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 
 import re
-import os
+
 
 def glob_to_regex(pat):
     """Translate a shell-style glob pattern to a regular expression.
