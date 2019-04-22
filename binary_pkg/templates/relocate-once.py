@@ -7,9 +7,13 @@ This script can be used exactly once to move the directory to a
 different location.
 """
 
-from __future__ import (absolute_import, division, print_function, unicode_literals)
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 
-import os, getopt, sys
+import os
+import getopt
+import sys
+
 
 def usage():
     print("relocate-once.py -d <destination>")
@@ -56,5 +60,3 @@ f.save()
 {% endfor %}
 
 os.remove(__file__)
-
-

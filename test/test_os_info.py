@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function, unicode_literals)
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 
-import re
-import os
 import unittest
 from binary_pkg.os_information import osname, arch, filename_sanitize
 
@@ -27,4 +26,3 @@ class TestOsInformation(unittest.TestCase):
         self.assertEqual(filename_sanitize('26'), '26')
         self.assertEqual(filename_sanitize('debian'), 'debian')
         self.assertEqual(filename_sanitize('jesse/sid'), 'jesse_sid')
-        
