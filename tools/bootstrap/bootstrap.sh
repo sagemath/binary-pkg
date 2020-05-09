@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-MINICONDA=Miniconda3-4.3.30
+MINICONDA=Miniconda3-4.7.12.1
 
 
 set -e
@@ -46,7 +46,7 @@ case "$(uname -s)-$(uname -m)" in
 	exit 1
 esac
 
-DOWNLOAD_URL=https://repo.continuum.io/miniconda/$MINICONDA-$ARCH.sh
+DOWNLOAD_URL=https://repo.anaconda.com/miniconda/$MINICONDA-$ARCH.sh
 
 mkdir -p "$BOOTSTRAP"
 $PYTHON "$BOOTSTRAP"/download.py "$BOOTSTRAP"/$MINICONDA.sh $DOWNLOAD_URL
