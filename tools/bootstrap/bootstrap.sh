@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-MINICONDA=Miniconda3-4.7.12.1
+MINICONDA=Miniconda3-4.5.12
 
 
 set -e
