@@ -1,7 +1,23 @@
 #!/usr/bin/env bash
 
+MINICONDA_32=Miniconda3-4.5.12
+MINICONDA_64=Miniconda3-py38_4.8.3
 
-MINICONDA=Miniconda3-4.5.12
+
+case "$(uname -s)-$(uname -m)" in
+    Darwin-x86_64)
+        MINICONDA=$MINICONDA_64
+        ARCH=MacOSX-x86_64 ;;
+    Linux-x86_64)
+        MINICONDA=$MINICONDA_64
+        ARCH=Linux-x86_64 ;;
+    Linux-i*)
+        MINICONDA=$MINICONDA_32
+        ARCH=Linux-x86 ;;
+    *)
+        echo 'Unknown architecture'
+        exit 1
+esac
 
 
 set -e
@@ -33,18 +49,6 @@ if [ -d "$BOOTSTRAP"/miniconda/envs/bootstrap ]; then
     exit 0
 fi
 
-
-case "$(uname -s)-$(uname -m)" in
-    Darwin-x86_64)
-	ARCH=MacOSX-x86_64 ;;
-    Linux-x86_64)
-	ARCH=Linux-x86_64 ;;
-    Linux-i*)
-	ARCH=Linux-x86 ;;
-    *)
-	echo 'Unknown architecture'
-	exit 1
-esac
 
 DOWNLOAD_URL=https://repo.anaconda.com/miniconda/$MINICONDA-$ARCH.sh
 
