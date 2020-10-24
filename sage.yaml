@@ -11,6 +11,8 @@ build: |
         export SAGE_INSTALL_GCC=yes
     fi
     export MAKE='make -j{ncpu}'
+    ./bootstrap -d
+    ./configure
     make || exit 1
     git gc --aggressive --prune=now
 
