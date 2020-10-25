@@ -13,6 +13,11 @@ build: |
     export MAKE='make -j{ncpu}'
     ./bootstrap -d
     ./configure
+    # workaround for https://trac.sagemath.org/ticket/
+    export MAKE='make -j2'
+    make build || exit 1
+    ./sage -c 'print(sin(x).simplify_full())'
+    # end workaround
     make || exit 1
     git gc --aggressive --prune=now
 
