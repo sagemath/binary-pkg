@@ -1,0 +1,75 @@
+diff --git a/sage b/sage
+index 3fad670c83..871c02cca7 100755
+--- a/sage
++++ b/sage
+@@ -124,16 +124,46 @@ fi
+ 
+ export SAGE_ROOT
+ 
+-# If this is a freshly-unpacked binary tarball then run the installer
++# If this is a freshly-unpacked binary tarball then run the installer.
++# For multi-user installations this must be done by a superuser, since
++# it will create the symlink for this Sage installation.
+ # Note: relocate-once.py deletes itself upon successful completion
+ if [ -x "$SAGE_ROOT/relocate-once.py" ]; then
+     "$SAGE_ROOT/relocate-once.py"
++    if [ $? -eq 3 ]; then
++        echo >&2 "\nAborted."
++        exit 1
++    fi
++    if [ $? -eq 2 ]; then
++        echo >&2 "You may now restart sage as a normal user."
++        exit 0
++    fi
+     if [ $? -ne 0 ]; then
+         echo >&2 "Error running the script 'relocate-once.py'."
+         exit 1
+     fi
+ fi
+ 
++# Check that the installation-specific symlink points to this sage
++# root directory and reset it if necessessary.  If the symlink is
++# in /var/tmp then it must be owned by root, so we use sudo
++# to reset it.
++. "$SAGE_ROOT"/runpath.sh
++OLD_ROOT=`readlink $SAGE_SYMLINK`
++if [ "$SAGE_ROOT" != "$OLD_ROOT" ]; then
++    echo "This sage installation has been moved!"
++    echo old location: $OLD_ROOT
++    echo new location: $SAGE_ROOT
++    echo "Reconfiguring Sage for its new home ..."
++    if [ "$(dirname "$SAGE_SYMLINK")" == "/var/tmp" ]; then
++        sudo -p "Please enter your admin password: " rm -f $SAGE_SYMLINK
++        sudo ln -s "$SAGE_ROOT" "$SAGE_SYMLINK"
++    else
++        rm -f $SAGE_SYMLINK
++        ln -s "$SAGE_ROOT" "$SAGE_SYMLINK"
++    fi
++fi
++
+ # Run the actual Sage script
+ if [ -x "$SAGE_ROOT/src/bin/sage" ]; then
+     exec "$SAGE_ROOT/src/bin/sage" "$@"
+diff --git a/src/bin/sage-env b/src/bin/sage-env
+index 1f02564f5c..6ac935ce25 100644
+--- a/src/bin/sage-env
++++ b/src/bin/sage-env
+@@ -138,12 +138,14 @@ NEW_SAGE_ROOT=`cd "$NEW_SAGE_ROOT" && pwd -P`
+ 
+ # Warn if NEW_SAGE_ROOT does not equal the old SAGE_ROOT
+ if [ "$SAGE_ROOT" != "$NEW_SAGE_ROOT" -a -n "$SAGE_ROOT" ]; then
+-    echo >&2 "Warning: overwriting SAGE_ROOT environment variable:"
+-    echo >&2 "Old SAGE_ROOT=$SAGE_ROOT"
+-    echo >&2 "New SAGE_ROOT=$NEW_SAGE_ROOT"
++    # But don't warn if we are just dereferencing the symlink
++    if ! [[ -L "$SAGE_ROOT" ]]; then
++        echo >&2 "Warning: overwriting SAGE_ROOT environment variable:"
++        echo >&2 "Old SAGE_ROOT=$SAGE_ROOT"
++        echo >&2 "New SAGE_ROOT=$NEW_SAGE_ROOT"
++    fi
+ fi
+ 
+-
+ # Don't execute the commands more than once for the same version of
+ # sage-env.  Check this after checking the validity of SAGE_ROOT, but
+ # before modifying its value.
