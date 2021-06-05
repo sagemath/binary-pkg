@@ -6,7 +6,7 @@ To build Sage binaries, just clone this repository and run
     git clone https://github.com/sagemath/binary-pkg.git
     cd binary-pkg
     make bdist-sage-linux     # If you are on Linux
-    make bdist-sage-osx       # If you are on OSX
+    make bdist-sage-macos     # If you are on macOS
     ls dist/                  # Built binaries will be in this directory
 
 Edit `sage.yaml` if you want to build something else than the current
@@ -37,7 +37,7 @@ patches any hard-coded paths. If there are more than one packaging
 configurations (see below), then the first one is used by default. Use
 the ``PACKAGE`` variable to pick another one, for example
 
-    make package-sage PACKAGE="OSX DMG image"
+    make package-sage PACKAGE="macOS disk image"
 
 In particular, see below for the different Mac packaging possibilities.
 
@@ -107,9 +107,9 @@ create a ``.tar.gz`` file, which is usually not what one wants on Mac.
 To create a Mac disk image file of the normal Sage command line distribution,
 use this package option:
 
-    make package-sage PACKAGE="OSX DMG image"
+    make package-sage PACKAGE="macOS disk image"
 
 To create a Mac disk image file of the Mac app bundle with menu items and
 which automatically launches a notebook, use
 
-    make package-sage PACKAGE="OSX mac app"
+    make package-sage PACKAGE="macOS app"

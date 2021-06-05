@@ -60,21 +60,21 @@ package:
     rewrite_path: *REWRITE_PATH_DEFAULT
     strip: True
 
-  - name: OSX DMG image
+  - name: macOS disk image
     dist: |
           DMG={dist}/sage-{version}-{osname}-{arch}.dmg
           rm -f $DMG
-          # This is also the directory name under which OSX will mount it
+          # This is also the directory name under which macOS will mount it
           TARGET=$(dirname {path})/sage-{version}-{osname}-{arch}
           mkdir -p $TARGET
-          cp {path}/src/bin/sage-README-osx.txt $TARGET/README.txt
+          cp {path}/README.md $TARGET/README.txt
           cp -a {path} $TARGET/
           hdiutil create -srcfolder $TARGET -format UDBZ $DMG
           rm -rf $TARGET
     files: *FILES_DEFAULT
     rewrite_path: *REWRITE_PATH_DEFAULT
 
-  - name: OSX mac app
+  - name: macOS app
     dist: |
           DMG={dist}/sage-{version}-{osname}-{arch}.app.dmg
           rm -f $DMG
