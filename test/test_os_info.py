@@ -17,7 +17,7 @@ class TestOsInformation(unittest.TestCase):
     def test_osname(self):
         self.assertIn(osname(), [
             'Fedora_26',
-            'OSX_10.11.3',
+            'macOS_10.15.7',
             'Ubuntu_16.04',
         ])
 

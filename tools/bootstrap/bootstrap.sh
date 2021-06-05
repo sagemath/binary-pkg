@@ -7,7 +7,7 @@ MINICONDA_64=Miniconda3-py38_4.8.3
 case "$(uname -s)-$(uname -m)" in
     Darwin-x86_64)
         MINICONDA=$MINICONDA_64
-        ARCH=MacOSX-x86_64 ;;
+        ARCH=macOS-x86_64 ;;
     Linux-x86_64)
         MINICONDA=$MINICONDA_64
         ARCH=Linux-x86_64 ;;
